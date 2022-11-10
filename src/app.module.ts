@@ -15,6 +15,7 @@ import { EtudiantModule } from './etudiant/etudiant.module';
 import { CompteModule } from './compte/compte.module';
 import { OperationModule } from './operation/operation.module';
 import { ServiceModule } from './service/service.module';
+import { PayementSubjectModule } from './payement-subject/payement-subject.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { ServiceModule } from './service/service.module';
     CompteModule,
     OperationModule,
     ServiceModule,
+    PayementSubjectModule,
   ],
   controllers: [AppController],
   providers: [AppService],

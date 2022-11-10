@@ -1,12 +1,12 @@
 import { IsMongoId, IsNumber, IsString } from "class-validator";
 
-export class CreateCompteDto {
+export class CreatePayementSubjectDto {
     @IsString()
-    code: string;
+    nom: string;
 
     @IsNumber()
-    solde: number;
+    prix: number;
 
     @IsMongoId()
-    etudiant: string;
+    service: string;
 }

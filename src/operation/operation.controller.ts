@@ -19,16 +19,16 @@ export class OperationController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.operationService.findOne(+id);
+    return this.operationService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateOperationDto: UpdateOperationDto) {
-    return this.operationService.update(+id, updateOperationDto);
+    return this.operationService.update(id, updateOperationDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.operationService.remove(+id);
+    return this.operationService.remove(id);
   }
 }
