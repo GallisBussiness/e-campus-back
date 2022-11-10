@@ -1,26 +1,53 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateCompteDto } from './dto/create-compte.dto';
 import { UpdateCompteDto } from './dto/update-compte.dto';
+import { Compte, CompteDocument } from './entities/compte.entity';
 
 @Injectable()
 export class CompteService {
-  create(createCompteDto: CreateCompteDto) {
-    return 'This action adds a new compte';
+  constructor(@InjectModel(Compte.name) private compteModel: Model<CompteDocument>){}
+
+
+  async create(createCompteDto: CreateCompteDto):Promise<Compte> {
+    try {
+      const creadtedCompte = new this.compteModel(createCompteDto);
+      return await creadtedCompte.save();
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
   }
 
-  findAll() {
-    return `This action returns all compte`;
+  async findAll(): Promise<Compte[]> {
+  try {
+    return await this.compteModel.find();
+  } catch (error) {
+    throw new HttpException(error.message, 500);
+  }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} compte`;
+  async findOne(id: string): Promise<Compte> {
+    try {
+      return await this.compteModel.findById(id);
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
   }
 
-  update(id: number, updateCompteDto: UpdateCompteDto) {
-    return `This action updates a #${id} compte`;
+  async update(id: string, updateCompteDto: UpdateCompteDto):Promise<Compte> {
+    try {
+      return await this.compteModel.findByIdAndUpdate(id, updateCompteDto);
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} compte`;
+  async remove(id: string): Promise<Compte> {
+    try {
+      return await this.compteModel.findByIdAndDelete(id);
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
   }
 }

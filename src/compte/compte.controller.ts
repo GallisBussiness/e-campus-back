@@ -19,16 +19,16 @@ export class CompteController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.compteService.findOne(+id);
+    return this.compteService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCompteDto: UpdateCompteDto) {
-    return this.compteService.update(+id, updateCompteDto);
+    return this.compteService.update(id, updateCompteDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.compteService.remove(+id);
+    return this.compteService.remove(id);
   }
 }
