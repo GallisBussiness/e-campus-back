@@ -7,9 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req,
-  UseInterceptors,
-  ClassSerializerInterceptor,
+  Req
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -21,7 +19,6 @@ import { CaslGuard } from 'src/casl/casl.guard';
 import { User } from './entities/user.entity';
 import { CheckAbility } from 'src/casl/policy.decorator';
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
 export class UserController {
   constructor(
@@ -42,10 +39,6 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @Post('many')
-  async createMany(@Body() createUserDto: CreateUserDto[]) {
-    return this.userService.createMany(createUserDto);
-  }
 
   @CheckAbility({ action: Action.Read, subject: User })
   @UseGuards(CaslGuard)

@@ -35,7 +35,7 @@ export class User {
   @Prop({ type: String })
   resetPasswordToken: string;
 
-  @Prop({ type: String, default: [USER_ROLE.USER] })
+  @Prop({ type: Array, default: [USER_ROLE.USER] })
   role: string[];
 }
 

@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@casl/ability": "^6.3.2",
-    "@nestjs/common": "^9.0.0",
+    "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/jwt": "^9.0.0",

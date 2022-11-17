@@ -28,10 +28,7 @@ export class Etudiant {
     @Prop({type: String, required: true})
     lieuDeNaissance: string;
   
-    @Prop({type: String, required: true})
-    formation: string;
-  
-    @Prop({type: String, required: true})
+    @Prop({type: String, required: true, default: "avatars/default.png"})
     avatar: string;
   
     @Prop({type: String, required: true, unique: true, max: 8})

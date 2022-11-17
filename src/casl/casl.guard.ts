@@ -27,7 +27,7 @@ export class CaslGuard implements CanActivate {
             return true;
          }
         catch (err) {
-            if(err instanceof ForbiddenError) throw new ForbiddenException(err);(err.message);
+            if(err instanceof ForbiddenError) throw new ForbiddenException(err);
         }
         
 }

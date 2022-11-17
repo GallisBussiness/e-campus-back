@@ -30,7 +30,7 @@ export class CaslAbilityFactory {
     if (user.role.includes(USER_ROLE.SUPERADMIN)) {
       can(Action.Manage, 'all'); // read-write access to everything
     } else {
-      can(Action.Read, User, { _id: user._id });
+      can(Action.Read, User);
     }
 
     return build({
