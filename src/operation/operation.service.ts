@@ -3,17 +3,29 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateOperationDto } from './dto/create-operation.dto';
 import { UpdateOperationDto } from './dto/update-operation.dto';
-import { Operation, OperationDocument } from './entities/operation.entity';
+import { Operation, OperationDocument, TYPE_OPERATION } from './entities/operation.entity';
 
 @Injectable()
 export class OperationService {
   constructor(@InjectModel(Operation.name) private OperationModel: Model<OperationDocument>){}
 
 
-  async create(createOperationDto: CreateOperationDto):Promise<Operation> {
+  async depot(createOperationDto: CreateOperationDto):Promise<boolean> {
     try {
-      const creadtedOperation = new this.OperationModel(createOperationDto);
-      return await creadtedOperation.save();
+      const createdOperation = new this.OperationModel(createOperationDto);
+      createdOperation.type = TYPE_OPERATION.DPT;
+      createdOperation.description = `dépot de ${createdOperation.montant}`;
+      return await (await createdOperation.save()).isNew;
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
+  }
+  async retrait(createOperationDto: CreateOperationDto):Promise<boolean> {
+    try {
+      const createdOperation = new this.OperationModel(createOperationDto);
+      createdOperation.type = TYPE_OPERATION.RTR;
+      createdOperation.description = `retrait de ${createdOperation.montant}`;
+      return await (await createdOperation.save()).isNew;
     } catch (error) {
       throw new HttpException(error.message, 500);
     }

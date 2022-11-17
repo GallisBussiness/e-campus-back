@@ -2,25 +2,19 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Type } from "class-transformer";
 import { Document, Types } from "mongoose";
 import { Compte } from "src/compte/entities/compte.entity";
-import { Service } from "src/service/entities/service.entity";
+import { PayementSubject } from "src/payement-subject/entities/payement-subject.entity";
 export enum TYPE_OPERATION {
-    RTR = 'Retrait',
-    DPT = 'Depot'
+    RTR = 'RTR',
+    DPT = 'DPT',
 }
 export type OperationDocument = Operation & Document;
 
 @Schema({timestamps: true})
 export class Operation {
-    @Prop({type: String, required: true})
-    date: string;
-
-    @Prop({type: String, required: true})
-    heure: string;
-
     @Prop({type: Number, required: true})
     montant: number;
 
-    @Prop({type: TYPE_OPERATION, required: true})
+    @Prop({type: String, required: true})
     type: string;
 
     @Prop({type: Types.ObjectId, ref: Compte.name, required: true, autopopulate: true})
@@ -30,12 +24,12 @@ export class Operation {
     @Prop({type: String, required: true})
     description: string;
 
-    @Prop({type: Types.ObjectId, ref: Service.name, required: true, autopopulate: true})
-    @Type(() => Service)
-    service: Service;
+    @Prop({type: Types.ObjectId, ref: PayementSubject.name, required: true, autopopulate: true})
+    @Type(() => PayementSubject)
+    payement_subject: PayementSubject;
 
     @Prop({type: Boolean, required: true, default: false})
-    isOwn: boolean;
+    isVirement: boolean;
 
     @Prop({type: String, required: true})
     responsable: string;

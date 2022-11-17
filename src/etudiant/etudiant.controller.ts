@@ -22,6 +22,11 @@ export class EtudiantController {
     return this.etudiantService.findOne(id);
   }
 
+  @Get('/nce/:nce')
+  findOneByNce(@Param('nce') nce: string) {
+    return this.etudiantService.findOneByNce(nce);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateEtudiantDto: UpdateEtudiantDto) {
     return this.etudiantService.update(id, updateEtudiantDto);

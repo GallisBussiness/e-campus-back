@@ -1,15 +1,19 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
 import { Etudiant } from "src/etudiant/entities/etudiant.entity";
+import {v4} from 'uuid'
 
 export type CompteDocument = Compte & Document;
 
 @Schema({timestamps: true})
 export class Compte {
+
+  _id: string;
+
   @Prop({type: Number, required: true})
   solde: number;
 
-  @Prop({type: String, required: true, unique: true})
+  @Prop({type: String, required: true, unique: true,default: v4()})
   code: string;
 
   @Prop({type: Types.ObjectId, ref: Etudiant.name, required: true, autopopulate: true})

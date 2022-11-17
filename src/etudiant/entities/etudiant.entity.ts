@@ -5,6 +5,8 @@ export type EtudiantDocument = Etudiant & Document;
 
 @Schema({timestamps: true})
 export class Etudiant {
+    _id: string;
+
     @Prop({type: String, required: true})
     prenom: string;
   

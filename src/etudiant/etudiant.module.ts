@@ -7,6 +7,7 @@ import { Etudiant, EtudiantSchema } from './entities/etudiant.entity';
 @Module({
   imports: [MongooseModule.forFeature([{name: Etudiant.name, schema: EtudiantSchema}])],
   controllers: [EtudiantController],
-  providers: [EtudiantService]
+  providers: [EtudiantService],
+  exports: [EtudiantService]
 })
 export class EtudiantModule {}

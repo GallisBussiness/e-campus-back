@@ -35,6 +35,14 @@ export class EtudiantService {
     }
   }
 
+  async findOneByNce(nce: string): Promise<Etudiant> {
+    try {
+      return await this.etudiantModel.findById({nce});
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
+  }
+
   async update(id: string, updateEtudiantDto: UpdateEtudiantDto):Promise<Etudiant> {
     try {
       return await this.etudiantModel.findByIdAndUpdate(id, updateEtudiantDto);
