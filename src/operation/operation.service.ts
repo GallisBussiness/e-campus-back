@@ -39,6 +39,14 @@ export class OperationService {
   }
   }
 
+  async findAllByCompte(id: string): Promise<Operation[]> {
+    try {
+      return await this.OperationModel.find({compte: id});
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
+    }
+
   async findOne(id: string): Promise<Operation> {
     try {
       return await this.OperationModel.findById(id);

@@ -1,5 +1,5 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, Logger } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 
 const logger = new Logger('HttpException')
 
@@ -17,6 +17,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
         path: request.url,
       });
 
-    throw new HttpException(exception.message, exception.getStatus());
+    
   }
 }

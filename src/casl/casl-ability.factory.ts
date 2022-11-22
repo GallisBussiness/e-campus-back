@@ -4,6 +4,7 @@ import {
   AbilityClass,
   ExtractSubjectType,
   InferSubjects,
+  mongoQueryMatcher,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 import { User, USER_ROLE } from 'src/user/entities/user.entity';
@@ -30,10 +31,13 @@ export class CaslAbilityFactory {
     if (user.role.includes(USER_ROLE.SUPERADMIN)) {
       can(Action.Manage, 'all'); // read-write access to everything
     } else {
-      can(Action.Read, User);
+      can(Action.Read, User, {_id: {$eq: user._id}});
+      can(Action.Delete, User, {_id: {$eq:user._id}});
+      can(Action.Update, User, {_id: {$eq:user._id}});
     }
 
     return build({
+      conditionsMatcher: mongoQueryMatcher,
       detectSubjectType: (item) =>
         item.constructor as ExtractSubjectType<Subjects>,
     });

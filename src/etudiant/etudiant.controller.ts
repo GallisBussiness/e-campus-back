@@ -1,14 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { EtudiantService } from './etudiant.service';
 import { CreateEtudiantDto } from './dto/create-etudiant.dto';
 import { UpdateEtudiantDto } from './dto/update-etudiant.dto';
+import { saveImageBase64 } from 'src/utils/saveImageBase64';
+import { unlinkSync } from 'fs';
 
 @Controller('etudiant')
 export class EtudiantController {
   constructor(private readonly etudiantService: EtudiantService) {}
 
   @Post()
-  create(@Body() createEtudiantDto: CreateEtudiantDto) {
+  async create(@Body() createEtudiantDto: CreateEtudiantDto) {
+    let destname;
+    try {
+     destname = await saveImageBase64(createEtudiantDto.avatar);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR, {cause: error});
+    }
+    createEtudiantDto.avatar = destname;
     return this.etudiantService.create(createEtudiantDto);
   }
 
@@ -33,7 +42,10 @@ export class EtudiantController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.etudiantService.remove(id);
+  async remove(@Param('id') id: string) {
+    const et = await this.etudiantService.remove(id);
+    if(et)
+    unlinkSync(et.avatar);
+    return et;
   }
 }

@@ -1,4 +1,4 @@
-import { IsArray, IsEmail, IsEnum, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
+import { IsArray, IsEmail, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -17,6 +17,6 @@ export class CreateUserDto {
   password: string;
 
   @IsOptional()
-  @IsArray({each: true})
+  @IsArray()
   role: string[];
 }

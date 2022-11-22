@@ -18,7 +18,7 @@ export class CaslGuard implements CanActivate {
             POLICY_KEY,
             context.getHandler(),
           ) || [];
-    
+
         const { user } = context.switchToHttp().getRequest();
         const ability = this.caslAbilityFactory.createForUser(user);
 

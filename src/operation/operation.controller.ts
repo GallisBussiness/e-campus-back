@@ -56,6 +56,11 @@ export class OperationController {
     return this.operationService.findAll();
   }
 
+  @Get('/compte/:id')
+  findAllByCompte(@Param('id') id: string) {
+    return this.operationService.findAllByCompte(id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.operationService.findOne(id);
