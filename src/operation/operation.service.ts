@@ -10,22 +10,22 @@ export class OperationService {
   constructor(@InjectModel(Operation.name) private OperationModel: Model<OperationDocument>){}
 
 
-  async depot(createOperationDto: CreateOperationDto):Promise<boolean> {
+  async depot(createOperationDto: CreateOperationDto):Promise<Operation> {
     try {
       const createdOperation = new this.OperationModel(createOperationDto);
       createdOperation.type = TYPE_OPERATION.DPT;
       createdOperation.description = `dépot de ${createdOperation.montant}`;
-      return await (await createdOperation.save()).isNew;
+      return await createdOperation.save();
     } catch (error) {
       throw new HttpException(error.message, 500);
     }
   }
-  async retrait(createOperationDto: CreateOperationDto):Promise<boolean> {
+  async retrait(createOperationDto: CreateOperationDto):Promise<Operation> {
     try {
       const createdOperation = new this.OperationModel(createOperationDto);
       createdOperation.type = TYPE_OPERATION.RTR;
       createdOperation.description = `retrait de ${createdOperation.montant}`;
-      return await (await createdOperation.save()).isNew;
+      return await createdOperation.save();
     } catch (error) {
       throw new HttpException(error.message, 500);
     }

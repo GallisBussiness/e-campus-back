@@ -14,7 +14,8 @@ export class OperationController {
     const compte = await this.compteService.findOne(createOperationDto.compte);
     const res = await this.operationService.depot(createOperationDto);
     if(res) {
-        const c = await this.compteService.update(compte._id, {solde: compte.solde + createOperationDto.montant})
+      const solde = compte.solde + createOperationDto.montant;
+        const c = await this.compteService.update(compte._id, {solde })
         return c ? res : false;
     }
     return false;

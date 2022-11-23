@@ -24,7 +24,7 @@ export class Operation {
     @Prop({type: String, required: true})
     description: string;
 
-    @Prop({type: Types.ObjectId, ref: PayementSubject.name, required: true, autopopulate: true})
+    @Prop({type: Types.ObjectId, ref: PayementSubject.name, autopopulate: true})
     @Type(() => PayementSubject)
     payement_subject: PayementSubject;
 
