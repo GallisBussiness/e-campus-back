@@ -37,8 +37,18 @@ export class EtudiantController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEtudiantDto: UpdateEtudiantDto) {
-    return this.etudiantService.update(id, updateEtudiantDto);
+  async update(@Param('id') id: string, @Body() updateEtudiantDto: UpdateEtudiantDto) {
+    let destname;
+    try {
+     destname = await saveImageBase64(updateEtudiantDto.avatar);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR, {cause: error});
+    }
+    updateEtudiantDto.avatar = destname;
+    const et = await this.etudiantService.update(id, updateEtudiantDto);
+    if(et)
+    unlinkSync(et.avatar);
+    return et;
   }
 
   @Delete(':id')
