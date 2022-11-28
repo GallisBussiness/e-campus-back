@@ -33,7 +33,7 @@ export class OperationService {
 
   async findAll(): Promise<Operation[]> {
   try {
-    return await this.OperationModel.find();
+    return await this.OperationModel.find().sort({createdAt: 'desc'});
   } catch (error) {
     throw new HttpException(error.message, 500);
   }
@@ -41,7 +41,7 @@ export class OperationService {
 
   async findAllByCompte(id: string): Promise<Operation[]> {
     try {
-      return await this.OperationModel.find({compte: id});
+      return await this.OperationModel.find({compte: id}).sort({createdAt: 'desc'});
     } catch (error) {
       throw new HttpException(error.message, 500);
     }

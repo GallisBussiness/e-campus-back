@@ -16,6 +16,10 @@ export class PayementSubjectController {
   findAll() {
     return this.payementSubjectService.findAll();
   }
+  @Get('byservice/:id')
+  findAllByService(@Param('id') id: string) {
+    return this.payementSubjectService.findAllByService(id);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

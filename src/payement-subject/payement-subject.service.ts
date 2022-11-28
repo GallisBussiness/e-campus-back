@@ -27,6 +27,14 @@ export class PayementSubjectService {
   }
   }
 
+  async findAllByService(id: string): Promise<PayementSubject[]> {
+    try {
+      return await this.PayementSubjectModel.find({service: id});
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
+    }
+
   async findOne(id: string): Promise<PayementSubject> {
     try {
       return await this.PayementSubjectModel.findById(id);
