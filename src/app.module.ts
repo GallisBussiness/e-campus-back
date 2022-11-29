@@ -16,6 +16,7 @@ import { CompteModule } from './compte/compte.module';
 import { OperationModule } from './operation/operation.module';
 import { ServiceModule } from './service/service.module';
 import { PayementSubjectModule } from './payement-subject/payement-subject.module';
+import { PubModule } from './pub/pub.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { PayementSubjectModule } from './payement-subject/payement-subject.modul
     OperationModule,
     ServiceModule,
     PayementSubjectModule,
+    PubModule,
   ],
   controllers: [AppController],
   providers: [AppService],
