@@ -32,8 +32,8 @@ export class UserController {
     return this.authService.login(req.user);
   }
 
-  // @CheckAbility({ action: Action.Create, subject: User })
-  // @UseGuards(AuthGuard('jwt'), CaslGuard)
+  @CheckAbility({ action: Action.Create, subject: User })
+  @UseGuards(AuthGuard('jwt'), CaslGuard)
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
