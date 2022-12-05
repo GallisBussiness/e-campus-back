@@ -55,6 +55,14 @@ export class OperationService {
     }
   }
 
+  async count(): Promise<number> {
+    try {
+      return await this.OperationModel.count();
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
+  }
+
   async update(id: string, updateOperationDto: UpdateOperationDto):Promise<Operation> {
     try {
       return await this.OperationModel.findByIdAndUpdate(id, updateOperationDto);

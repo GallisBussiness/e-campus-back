@@ -35,6 +35,14 @@ export class EtudiantService {
     }
   }
 
+  async count(): Promise<number> {
+    try {
+      return await this.etudiantModel.count();
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
+  }
+
   async findOneByNce(nce: string): Promise<Etudiant> {
     try {
       return await this.etudiantModel.findById({nce});

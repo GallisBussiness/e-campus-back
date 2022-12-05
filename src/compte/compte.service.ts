@@ -59,6 +59,13 @@ export class CompteService {
       throw new HttpException(error.message, 500);
     }
   }
+  async count(): Promise<number> {
+    try {
+      return await this.compteModel.count();
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
+  }
 
   async findOneByCode(code: string): Promise<Compte> {
     try {

@@ -29,6 +29,11 @@ export class CompteController {
     return this.compteService.findAll();
   }
 
+  @Get('count')
+  count() {
+    return this.compteService.count();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.compteService.findOne(id);

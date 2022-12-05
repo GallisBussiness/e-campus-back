@@ -25,6 +25,11 @@ export class EtudiantController {
   findAll() {
     return this.etudiantService.findAll();
   }
+  
+  @Get('count')
+  count() {
+    return this.etudiantService.count();
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
