@@ -13,7 +13,7 @@ export class PubController {
   @UseInterceptors(FileInterceptor('audio'))
   create(@UploadedFile( new ParseFilePipe({
     validators: [
-      new FileTypeValidator({ fileType: 'mp4' }),
+      new FileTypeValidator({ fileType: 'wav' }),
     ]
   })) file: Express.Multer.File,@Body() createPubDto: CreatePubDto) {
     createPubDto.audio = file.filename;
