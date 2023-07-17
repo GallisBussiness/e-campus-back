@@ -8,11 +8,13 @@ import { UpdateCompteDto } from './dto/update-compte.dto';
 import { Compte, CompteDocument } from './entities/compte.entity';
 import * as bcrypt from 'bcryptjs';
 import { hashFromRequest } from 'src/utils/hash-pass-from-request';
+import { OperationService } from 'src/operation/operation.service';
 
 @Injectable()
 export class CompteService {
   constructor(
     @InjectModel(Compte.name) private compteModel: Model<CompteDocument>,
+    private readonly operationService:OperationService
     ){}
 
 
@@ -96,7 +98,9 @@ export class CompteService {
 
   async remove(id: string): Promise<Compte> {
     try {
-      return await this.compteModel.findByIdAndDelete(id);
+      const c =  await this.compteModel.findByIdAndDelete(id);
+       await this.operationService.deleteMany(c._id);
+      return c;
     } catch (error) {
       throw new HttpException(error.message, 500);
     }

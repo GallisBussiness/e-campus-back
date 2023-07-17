@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { OperationService } from './operation.service';
 import { OperationController } from './operation.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -16,9 +16,10 @@ import { Compte, CompteSchema } from 'src/compte/entities/compte.entity';
     schema.plugin(require('mongoose-autopopulate'));
     return schema;
   }}]),
-CompteModule,
+ forwardRef(() => CompteModule),
 ],
   controllers: [OperationController],
-  providers: [OperationService]
+  providers: [OperationService],
+  exports: [OperationService]
 })
 export class OperationModule {}

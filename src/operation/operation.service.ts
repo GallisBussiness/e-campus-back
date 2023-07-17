@@ -89,6 +89,15 @@ export class OperationService {
     }
   }
 
+  async deleteMany(id: string): Promise<any> {
+    try {
+      const op = await this.OperationModel.deleteMany({compte: id.toString()});
+      return op.deletedCount;
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
+  }
+
   async count(): Promise<number> {
     try {
       return await this.OperationModel.count();
