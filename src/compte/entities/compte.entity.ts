@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Exclude } from "class-transformer";
 import { Document, Types } from "mongoose";
 import { Etudiant } from "src/etudiant/entities/etudiant.entity";
 import {v4} from 'uuid'
@@ -15,6 +16,10 @@ export class Compte {
 
   @Prop({type: String, required: true, unique: true,default: v4()})
   code: string;
+
+  @Prop({ type: String, required: true })
+  @Exclude()
+  password: string;
 
   @Prop({type: Types.ObjectId, ref: Etudiant.name, required: true, autopopulate: true})
   etudiant: Etudiant;

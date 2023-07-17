@@ -5,5 +5,5 @@ export class CompteUpdatePassDto {
     oldPass: string;
 
     @IsString()
-    newPass: string;
+    password: string;
 }

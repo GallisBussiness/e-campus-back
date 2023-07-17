@@ -1,33 +1,59 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
+import mongoose, { Model } from 'mongoose';
 import { CreateOperationDto } from './dto/create-operation.dto';
 import { UpdateOperationDto } from './dto/update-operation.dto';
 import { Operation, OperationDocument, TYPE_OPERATION } from './entities/operation.entity';
+import { Compte, CompteDocument } from 'src/compte/entities/compte.entity';
 
 @Injectable()
 export class OperationService {
-  constructor(@InjectModel(Operation.name) private OperationModel: Model<OperationDocument>){}
+  constructor(
+    @InjectModel(Compte.name) private compteModel: Model<CompteDocument>,
+    @InjectModel(Operation.name) private OperationModel: Model<OperationDocument>,
+    @InjectConnection() private readonly connection: mongoose.Connection,
+  ){}
 
 
   async depot(createOperationDto: CreateOperationDto):Promise<Operation> {
+    const session = await this.connection.startSession();
+    session.startTransaction();
     try {
+      const compte = await this.compteModel.findById(createOperationDto.compte).session(session);
       const createdOperation = new this.OperationModel(createOperationDto);
       createdOperation.type = TYPE_OPERATION.DPT;
       createdOperation.description = `dépot de ${createdOperation.montant}`;
-      return await createdOperation.save();
+      const nopp = await createdOperation.save({session});
+      const solde = compte.solde + nopp.montant;
+      const c = await this.compteModel.findByIdAndUpdate(compte._id, {solde }).session(session);
+      await session.commitTransaction();
+      return nopp;
     } catch (error) {
+      await session.abortTransaction();
       throw new HttpException(error.message, 500);
+    }
+    finally {
+      session.endSession();
     }
   }
   async retrait(createOperationDto: CreateOperationDto):Promise<Operation> {
+    const session = await this.connection.startSession();
+    session.startTransaction();
     try {
+      const compte = await this.compteModel.findById(createOperationDto.compte).session(session);
       const createdOperation = new this.OperationModel(createOperationDto);
       createdOperation.type = TYPE_OPERATION.RTR;
       createdOperation.description = `retrait de ${createdOperation.montant}`;
-      return await createdOperation.save();
+      const nopp = await createdOperation.save({session});
+      const c = await this.compteModel.findByIdAndUpdate(compte._id, {solde:compte.solde - nopp.montant }).session(session);
+      await session.commitTransaction();
+      return nopp;
     } catch (error) {
+      await session.abortTransaction();
       throw new HttpException(error.message, 500);
+    }
+    finally {
+      session.endSession();
     }
   }
 
@@ -46,6 +72,14 @@ export class OperationService {
       throw new HttpException(error.message, 500);
     }
     }
+
+    async findLatestByCompte(id: string): Promise<Operation[]> {
+      try {
+        return await this.OperationModel.find({compte: id}).limit(6).sort({createdAt: 'desc'});
+      } catch (error) {
+        throw new HttpException(error.message, 500);
+      }
+      }
 
   async findOne(id: string): Promise<Operation> {
     try {

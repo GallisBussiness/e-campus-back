@@ -11,45 +11,21 @@ export class OperationController {
 
   @Post('depot')
   async depot(@Body() createOperationDto: CreateOperationDto) {
-    const compte = await this.compteService.findOne(createOperationDto.compte);
-    const res = await this.operationService.depot(createOperationDto);
-    if(res) {
-      const solde = compte.solde + createOperationDto.montant;
-        const c = await this.compteService.update(compte._id, {solde })
-        return c ? res : false;
-    }
-    return false;
+    return await this.operationService.depot(createOperationDto);
   }
 
   @Post('retrait')
   async retrait(@Body() createOperationDto: CreateOperationDto) {
-    const compte = await this.compteService.findOne(createOperationDto.compte);
-    const res = await this.operationService.retrait(createOperationDto);
-    if(res) {
-        const c = await this.compteService.update(compte._id, {solde: compte.solde - createOperationDto.montant})
-        return c ? res : false;
-    }
-    return false;
+    return this.operationService.retrait(createOperationDto);
   }
 
   @Post('virement')
   async virement(@Body() virementOperationDto: VirementOperationDto) {
-    const compteFrom = await this.compteService.findOne(virementOperationDto.id_from);
-    const compteTo = await this.compteService.findOne(virementOperationDto.id_to);
     const payloadFrom = {compte: virementOperationDto.id_from, montant: virementOperationDto.montant, isVirement: true};
     const payloadTo = {compte: virementOperationDto.id_to, montant: virementOperationDto.montant, isVirement: true};
-    if(await this.operationService.retrait(payloadFrom)){
-      const c = await this.compteService.update(compteFrom._id, {solde: compteFrom.solde - virementOperationDto.montant})
-      if(c) {
-        const d =  await this.operationService.depot(payloadTo);
-        if(d) {
-          const u = await this.compteService.update(compteTo._id, {solde: compteTo.solde + virementOperationDto.montant})
-          return u ? d: false
-        }
-      }
-
-    }
-   return false; 
+    await this.operationService.retrait(payloadFrom)
+    await this.operationService.depot(payloadTo);
+    return true;
   }
 
   @Get()
@@ -60,6 +36,11 @@ export class OperationController {
   @Get('/compte/:id')
   findAllByCompte(@Param('id') id: string) {
     return this.operationService.findAllByCompte(id);
+  }
+
+  @Get('/compte/latest/:id')
+  findLatestByCompte(@Param('id') id: string) {
+    return this.operationService.findLatestByCompte(id);
   }
 
   @Get('count')

@@ -14,9 +14,6 @@ export class CreateEtudiantDto {
   tel: string;
 
   @IsString()
-  password: string;
-
-  @IsString()
   dateDeNaissance: string;
 
   @IsString()

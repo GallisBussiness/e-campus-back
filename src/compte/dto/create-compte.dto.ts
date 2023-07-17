@@ -6,4 +6,7 @@ export class CreateCompteDto {
 
     @IsMongoId()
     etudiant: string;
+
+    @IsString()
+    password: string;
 }
