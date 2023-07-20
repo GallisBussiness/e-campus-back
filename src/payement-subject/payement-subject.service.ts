@@ -7,7 +7,7 @@ import { PayementSubject, PayementSubjectDocument } from './entities/payement-su
 
 @Injectable()
 export class PayementSubjectService {
-  constructor(@InjectModel(PayementSubject.name) private PayementSubjectModel: Model<PayementSubjectDocument>){}
+  constructor(@InjectModel(PayementSubject.name,'ecampus') private PayementSubjectModel: Model<PayementSubjectDocument>){}
 
 
   async create(createPayementSubjectDto: CreatePayementSubjectDto):Promise<PayementSubject> {

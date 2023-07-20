@@ -7,7 +7,7 @@ import { Service, ServiceDocument } from './entities/service.entity';
 
 @Injectable()
 export class ServiceService {
-  constructor(@InjectModel(Service.name) private ServiceModel: Model<ServiceDocument>){}
+  constructor(@InjectModel(Service.name,'ecampus') private ServiceModel: Model<ServiceDocument>){}
 
 
   async create(createServiceDto: CreateServiceDto):Promise<Service> {

@@ -24,16 +24,22 @@ export type AppAbility = PureAbility<[Action, Subjects]>;
 @Injectable()
 export class CaslAbilityFactory {
   createForUser(user: User) {
-    const { can, build } = new AbilityBuilder<PureAbility<[Action, Subjects]>>(
+    const { can,cannot, build } = new AbilityBuilder<PureAbility<[Action, Subjects]>>(
       PureAbility as AbilityClass<AppAbility>,
     );
 
     if (user.role.includes(USER_ROLE.SUPERADMIN)) {
       can(Action.Manage, 'all'); // read-write access to everything
-    } else {
+    }
+    else if(user.role.includes(USER_ROLE.ADMIN)) {
       can(Action.Read, User, {_id: {$eq: user._id}});
-      can(Action.Delete, User, {_id: {$eq:user._id}});
       can(Action.Update, User, {_id: {$eq:user._id}});
+      can(Action.Delete, User, {_id: {$eq:user._id}});
+    }
+     else {
+      can(Action.Read, User, {_id: {$eq: user._id}});
+      can(Action.Update, User, {_id: {$eq:user._id}});
+      cannot(Action.Delete, User, {_id: {$eq:user._id}});
     }
 
     return build({

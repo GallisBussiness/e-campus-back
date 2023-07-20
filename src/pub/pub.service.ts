@@ -7,7 +7,7 @@ import { Pub, PubDocument } from './entities/pub.entity';
 
 @Injectable()
 export class PubService {
-  constructor(@InjectModel(Pub.name) private PubModel: Model<PubDocument>){}
+  constructor(@InjectModel(Pub.name,'ecampus') private PubModel: Model<PubDocument>){}
 
 
   async create(createPubDto: CreatePubDto):Promise<Pub> {

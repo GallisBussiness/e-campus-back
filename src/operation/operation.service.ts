@@ -9,9 +9,9 @@ import { Compte, CompteDocument } from 'src/compte/entities/compte.entity';
 @Injectable()
 export class OperationService {
   constructor(
-    @InjectModel(Compte.name) private compteModel: Model<CompteDocument>,
-    @InjectModel(Operation.name) private OperationModel: Model<OperationDocument>,
-    @InjectConnection() private readonly connection: mongoose.Connection,
+    @InjectModel(Compte.name,'ecampus') private compteModel: Model<CompteDocument>,
+    @InjectModel(Operation.name,'ecampus') private OperationModel: Model<OperationDocument>,
+    @InjectConnection('ecampus') private readonly connection: mongoose.Connection,
   ){}
 
 

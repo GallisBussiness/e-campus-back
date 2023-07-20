@@ -21,7 +21,7 @@ export class Compte {
   @Exclude()
   password: string;
 
-  @Prop({type: Types.ObjectId, ref: Etudiant.name, required: true, autopopulate: true})
+  @Prop({type: String, required: true})
   etudiant: Etudiant;
 }
 

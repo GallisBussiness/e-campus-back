@@ -28,6 +28,15 @@ import { PubModule } from './pub/pub.module';
         uri: config.get('MONGODB_URL'),
         autoCreate: true,
       }),
+      connectionName:'ecampus',
+      inject: [ConfigService],
+    }),
+    MongooseModule.forRootAsync({
+      useFactory: async (config: ConfigService) => ({
+        uri: config.get('MONGODB_URL_ETUDIANT'),
+        autoCreate: true,
+      }),
+      connectionName:'etudiant',
       inject: [ConfigService],
     }),
     JwtModule.registerAsync({

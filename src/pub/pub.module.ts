@@ -22,7 +22,7 @@ const storage = diskStorage({
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{name: Pub.name, schema: PubSchema}]),
+    MongooseModule.forFeature([{name: Pub.name, schema: PubSchema}],'ecampus'),
     MulterModule.register({
       storage
     })

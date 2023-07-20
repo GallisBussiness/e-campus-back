@@ -1,20 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { OperationService } from './operation.service';
 import { CreateOperationDto } from './dto/create-operation.dto';
 import { UpdateOperationDto } from './dto/update-operation.dto';
 import { CompteService } from 'src/compte/compte.service';
 import { VirementOperationDto } from './dto/virement-operation.dto';
+import { CheckAbility } from 'src/casl/policy.decorator';
+import { AuthGuard } from '@nestjs/passport';
+import { Action } from 'src/casl/casl-ability.factory';
+import { User } from 'src/user/entities/user.entity';
+import { CaslGuard } from 'src/casl/casl.guard';
 
 @Controller('operation')
 export class OperationController {
   constructor(private readonly operationService: OperationService, private readonly compteService: CompteService) {}
 
   @Post('depot')
+  @CheckAbility({ action: Action.Create, subject: User })
+  @UseGuards(AuthGuard('jwt'), CaslGuard)
   async depot(@Body() createOperationDto: CreateOperationDto) {
     return await this.operationService.depot(createOperationDto);
   }
 
   @Post('retrait')
+  @CheckAbility({ action: Action.Create, subject: User })
+  @UseGuards(AuthGuard('jwt'), CaslGuard)
   async retrait(@Body() createOperationDto: CreateOperationDto) {
     return this.operationService.retrait(createOperationDto);
   }
@@ -54,11 +63,15 @@ export class OperationController {
   }
 
   @Patch(':id')
+  @CheckAbility({ action: Action.Manage, subject: User })
+  @UseGuards(AuthGuard('jwt'), CaslGuard)
   update(@Param('id') id: string, @Body() updateOperationDto: UpdateOperationDto) {
     return this.operationService.update(id, updateOperationDto);
   }
 
   @Delete(':id')
+  @CheckAbility({ action: Action.Manage, subject: User })
+  @UseGuards(AuthGuard('jwt'), CaslGuard)
   remove(@Param('id') id: string) {
     return this.operationService.remove(id);
   }

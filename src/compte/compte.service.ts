@@ -9,11 +9,13 @@ import { Compte, CompteDocument } from './entities/compte.entity';
 import * as bcrypt from 'bcryptjs';
 import { hashFromRequest } from 'src/utils/hash-pass-from-request';
 import { OperationService } from 'src/operation/operation.service';
+import { Etudiant, EtudiantDocument } from 'src/etudiant/entities/etudiant.entity';
 
 @Injectable()
 export class CompteService {
   constructor(
-    @InjectModel(Compte.name) private compteModel: Model<CompteDocument>,
+    @InjectModel(Compte.name,'ecampus') private compteModel: Model<CompteDocument>,
+    @InjectModel(Etudiant.name,'etudiant') private etudiantModel: Model<EtudiantDocument>,
     private readonly operationService:OperationService
     ){}
 
@@ -51,7 +53,7 @@ export class CompteService {
 
   async findAll(): Promise<Compte[]> {
   try {
-    return await this.compteModel.find();
+    return await this.compteModel.find().populate('etudiant','',this.etudiantModel);
   } catch (error) {
     throw new HttpException(error.message, 500);
   }
@@ -59,7 +61,7 @@ export class CompteService {
 
   async findOne(id: string): Promise<Compte> {
     try {
-      return await this.compteModel.findById(id);
+      return await this.compteModel.findById(id).populate('etudiant','',this.etudiantModel);
     } catch (error) {
       throw new HttpException(error.message, 500);
     }
@@ -74,7 +76,7 @@ export class CompteService {
 
   async findOneByCode(code: string): Promise<Compte> {
     try {
-      return await this.compteModel.findOne({code});
+      return await this.compteModel.findOne({code}).populate('etudiant','',this.etudiantModel);
     } catch (error) {
       throw new HttpException(error.message, 500);
     }
@@ -82,7 +84,7 @@ export class CompteService {
 
   async findOneByEtudiant(id: string): Promise<Compte> {
     try {
-      return await this.compteModel.findOne({etudiant: id});
+      return await this.compteModel.findOne({etudiant: id}).populate('etudiant','',this.etudiantModel);
     } catch (error) {
       throw new HttpException(error.message, 500);
     }
@@ -90,7 +92,7 @@ export class CompteService {
 
   async update(id: string, updateCompteDto: UpdateCompteDto):Promise<Compte> {
     try {
-      return await this.compteModel.findByIdAndUpdate(id, updateCompteDto);
+      return await this.compteModel.findByIdAndUpdate(id, updateCompteDto).populate('etudiant','',this.etudiantModel);
     } catch (error) {
       throw new HttpException(error.message, 500);
     }
@@ -98,7 +100,7 @@ export class CompteService {
 
   async remove(id: string): Promise<Compte> {
     try {
-      const c =  await this.compteModel.findByIdAndDelete(id);
+      const c =  await this.compteModel.findByIdAndDelete(id).populate('etudiant','',this.etudiantModel);
        await this.operationService.deleteMany(c._id);
       return c;
     } catch (error) {
