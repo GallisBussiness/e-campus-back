@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Type } from "class-transformer";
+import { Expose, Type } from "class-transformer";
 import { Document, Types } from "mongoose";
 import { Compte } from "src/compte/entities/compte.entity";
 import { PayementSubject } from "src/payement-subject/entities/payement-subject.entity";
@@ -33,6 +33,33 @@ export class Operation {
 
     @Prop({type: String, required: true})
     responsable: string;
+}
+
+export class SerializedOperation {
+
+    montant: number;
+
+    type: string;
+
+    @Type(() => Compte)
+    compte: Compte;
+
+    description: string;
+
+    @Type(() => PayementSubject)
+    payement_subject: PayementSubject;
+
+    isVirement: boolean;
+
+    responsable: string;
+
+    createdAt: string;
+
+    @Expose()
+    get date(): string {
+    return `${this.createdAt} hffkdfk`;
+}
+
 }
 
 export const OperationSchema = SchemaFactory.createForClass(Operation);

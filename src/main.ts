@@ -18,9 +18,9 @@ async function bootstrap() {
   app.use(json({limit:'10mb'}));
   app.enableCors({
     origin: '*',
-    allowedHeaders:
-      'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe,Authorization',
+    allowedHeaders:"*",
     methods: 'GET,PUT,POST,DELETE,PATCH,UPDATE,OPTIONS',
+    credentials:true,
   });
   app.useGlobalPipes(
     new ValidationPipe({

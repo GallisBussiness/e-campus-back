@@ -43,6 +43,14 @@ export class PayementSubjectService {
     }
   }
 
+  async deleteMany(service: string): Promise<Number> {
+    try {
+      return (await this.PayementSubjectModel.deleteMany({service})).deletedCount;
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
+  }
+
   async update(id: string, updatePayementSubjectDto: UpdatePayementSubjectDto):Promise<PayementSubject> {
     try {
       return await this.PayementSubjectModel.findByIdAndUpdate(id, updatePayementSubjectDto);

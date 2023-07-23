@@ -12,6 +12,7 @@ import { CaslModule } from 'src/casl/casl.module';
     return schema;
   }}],'ecampus'),CaslModule],
   controllers: [PayementSubjectController],
-  providers: [PayementSubjectService]
+  providers: [PayementSubjectService],
+  exports: [PayementSubjectService]
 })
 export class PayementSubjectModule {}

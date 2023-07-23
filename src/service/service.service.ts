@@ -4,10 +4,12 @@ import { Model } from 'mongoose';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { Service, ServiceDocument } from './entities/service.entity';
+import { PayementSubjectService } from 'src/payement-subject/payement-subject.service';
 
 @Injectable()
 export class ServiceService {
-  constructor(@InjectModel(Service.name,'ecampus') private ServiceModel: Model<ServiceDocument>){}
+  constructor(@InjectModel(Service.name,'ecampus') private ServiceModel: Model<ServiceDocument>,
+  private readonly payementSubjectService : PayementSubjectService){}
 
 
   async create(createServiceDto: CreateServiceDto):Promise<Service> {
@@ -45,7 +47,9 @@ export class ServiceService {
 
   async remove(id: string): Promise<Service> {
     try {
-      return await this.ServiceModel.findByIdAndDelete(id);
+      const s = await this.ServiceModel.findByIdAndDelete(id);
+      await this.payementSubjectService.deleteMany(s._id);
+      return s;
     } catch (error) {
       throw new HttpException(error.message, 500);
     }

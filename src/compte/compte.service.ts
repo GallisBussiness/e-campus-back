@@ -1,4 +1,4 @@
-import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CompteUpdatePassDto } from './dto/compte-update-pass-dto';
@@ -34,7 +34,12 @@ export class CompteService {
       const compte = await this.findOneByCode(compteLoginDto.code);
       if(compte) {
         const isMatch = await bcrypt.compare(compteLoginDto.password, compte.password);
-        if(isMatch) return compte;
+        if(isMatch) {
+        return compte; 
+        }
+        else {
+          throw new BadRequestException("Mot de passe incorrect");
+        }
       }
       throw new UnauthorizedException();
   }
@@ -45,7 +50,10 @@ export class CompteService {
       const isMatch = await bcrypt.compare(compteUpdatePassDto.oldPass, compte.password);
       if(isMatch) {
         const np = await hashFromRequest(compteUpdatePassDto);
-        return  await  this.update(id,{password: np.password})
+        return  await this.update(id,{password: np.password})
+      }
+      else {
+        throw new UnauthorizedException();
       }
     }
     throw new UnauthorizedException();
